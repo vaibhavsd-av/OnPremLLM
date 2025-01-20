@@ -33,7 +33,7 @@ def query():
     print(f"search_img_id execution time: {search_end_time - search_start_time:.4f} seconds")
 
     # Construct image path
-    image_path = os.path.join('images\\', f'{img_id}.jpg')
+    image_path = os.path.join('images', f'{img_id}.jpg')
 
     # Measure time for getting the response
     response_start_time = time.time()

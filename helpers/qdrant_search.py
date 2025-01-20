@@ -1,6 +1,7 @@
 from qdrant_client import QdrantClient, models
 
-qdrant_client = QdrantClient(url="http://localhost:6333")
+# qdrant_client = QdrantClient(url="http://localhost:6333")
+qdrant_client = QdrantClient(host="qdrant", port=6333)
 
 collection_name = "onprem_llm_collection"
 

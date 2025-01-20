@@ -9,7 +9,7 @@ USER_AVATAR = "🧑‍💻"
 BOT_AVATAR = "🤖"
 
 st.set_page_config(page_title="On Prem Gen AI LLM",
-                   page_icon="frontend\\logo.png",
+                   page_icon="frontend/logo.png",
                    layout="wide")
 
 
@@ -19,7 +19,7 @@ if 'session_id' not in st.session_state:
     st.session_state['session_id'] = datetime.now().timestamp()
     st.session_state.messages = []
 
-with open('frontend\\style.css') as f:
+with open('frontend/style.css') as f:
     css = f.read()
 
 st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)

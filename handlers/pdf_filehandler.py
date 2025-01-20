@@ -35,7 +35,7 @@ colqwen_proc = ColQwen2Processor.from_pretrained("vidore/colqwen2-v1.0")
 collection_name = "onprem_llm_collection"
 
 # Initialize Qdrant client in server mode
-qdrant_client = QdrantClient(host="localhost", port=6333)
+qdrant_client = QdrantClient(host="qdrant", port=6333)
 
 if not qdrant_client.collection_exists(collection_name):
   qdrant_client.create_collection(
