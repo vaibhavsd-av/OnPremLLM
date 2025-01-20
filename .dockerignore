@@ -1,0 +1,11 @@
+# Ignore unnecessary files and directories
+__pycache__/
+.git/
+.gitignore
+node_modules/
+*.log
+*.tmp
+*.bak
+*.swp
+env
+.DS_Store

@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Python app container
+  app:
+    build: .
+    container_name: my-python-app
+    ports:
+      - "8501:8501"  # Expose Streamlit on localhost
+      - "5000:5000"  # Expose Flask API on localhost
+    volumes:
+      - ./docs:/app/docs 
+      - .:/app  # Mount the current directory to the container
+    depends_on:
+      - qdrant  # Ensure Qdrant is up before starting the app
+    restart: always  # Automatically restart app container if it fails
+
+  # Qdrant container
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333"  # Expose Qdrant on localhost
+    environment:
+      QDRANT__SERVICE__LISTEN: "0.0.0.0:6333"  # Listen on all IP addresses inside the container
+    volumes:
+      - qdrant-data:/qdrant/storage  # Persist Qdrant data on host
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/"]  # Simple health check to ensure Qdrant is up
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
+    restart: always  # Ensure Qdrant restarts in case of failure
+
+volumes:
+  qdrant-data:
+    driver: local
