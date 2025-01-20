@@ -133,3 +133,25 @@ pip install -r requirements.txt
 Create a .env file in the project root with the following content:
 ```env
 GROQ_KEY="your_groq_api_key_here"
+```
+
+## Docker Setup
+
+To run the project using Docker, follow the steps below:
+
+1. **Build the Docker Image**:
+   From the root of the project, run:
+   ```bash
+   docker build -t onprem-llm .
+   ```
+
+2. **Run the Docker Container**:
+   ```bash
+   docker run -d -p 5000:5000 onprem-llm
+   ```
+
+3. **Start the Application**:
+   Run the following to start both the backend and frontend services:
+   ```bash
+   docker-compose up
+   ```
