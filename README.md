@@ -2,6 +2,9 @@
 
 OnPremLLM is a project designed to simplify document embedding and querying. It provides an automated workflow to create embeddings for documents and enables querying with image responses using a GROQ API. The project includes a Flask-based API, a Streamlit frontend, and supports integration with Qdrant for storage.
 
+## Architecture of System
+![Alt text](https://github.com/vaibhavsd-av/OnPremLLM/blob/main/OnpremLLM.png)
+
 ## Features
 
 - **Automated Document Embeddings**: Automatically generates embeddings for all documents in the docs folder.
@@ -68,10 +71,30 @@ OnPremLLM is a project designed to simplify document embedding and querying. It 
 2. The watcher.py script will automatically generate embeddings for the documents.
 3. Generated embeddings will be saved in the images folder with unique names.
 
-### Querying with GROQ API
+### Querying with GROQ API (Online Mode)
 
 1. Ensure your .env file contains a valid GROQ API key.
 2. Use the frontend or backend API to send queries and receive answers along with images.
+
+### Querying with Local System
+
+1. Use ```get_response_offline``` instead of ```get_response``` in api/app.py.
+   ```
+   from helpers.generate_answer import get_response_offline
+
+   # response = get_response(image_path, query_text, history)
+   response = get_response_offline(image_path, query_text)
+    ```
+2. To get more tokens in the output from the model, you can adjust the ```max_new_tokens``` parameter when calling the generate method. The ```max_new_tokens``` parameter controls the maximum number of tokens the model can generate in response to your input.
+example:
+```
+output_ids = model.generate(**inputs, max_new_tokens=1000)
+```
+
+
+### NOTE: 
+When using offline mode, it will require high computational power and it will be time consuming process.
+
 
 ## Setting Up Qdrant for Storing Embeddings
 
@@ -139,19 +162,8 @@ GROQ_KEY="your_groq_api_key_here"
 
 To run the project using Docker, follow the steps below:
 
-1. **Build the Docker Image**:
+**Build the Docker Image**:
    From the root of the project, run:
    ```bash
-   docker build -t onprem-llm .
-   ```
-
-2. **Run the Docker Container**:
-   ```bash
-   docker run -d -p 5000:5000 onprem-llm
-   ```
-
-3. **Start the Application**:
-   Run the following to start both the backend and frontend services:
-   ```bash
-   docker-compose up
+   docker up --build
    ```
