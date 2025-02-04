@@ -37,8 +37,8 @@ def query():
 
     # Measure time for getting the response
     response_start_time = time.time()
-    response = get_response(image_path, query_text, history)
-    # response = get_response_offline(image_path, query_text)
+    # response = get_response(image_path, query_text, history)
+    response = get_response_offline(image_path, query_text)
     response_end_time = time.time()
     print(f"get_response execution time: {response_end_time - response_start_time:.4f} seconds")
 
