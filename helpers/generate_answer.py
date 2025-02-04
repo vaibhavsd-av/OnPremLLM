@@ -19,7 +19,7 @@ def get_response_offline(image_path, query_text):
     try:
         image = Image.open(image_path)
         # Resize the image to reduce memory usage (optional)
-        image = image.resize((256, 256),  Image.LANCZOS)  # Adjust this size as needed
+        image = image.resize((750, 750))  # Adjust this size as needed
     except Exception as e:
         print(f"Error loading image: {e}")
         exit()
