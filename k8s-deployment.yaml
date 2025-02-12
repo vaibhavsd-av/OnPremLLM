@@ -1,0 +1,104 @@
+---
+# -----------------------------------------------------
+# 1. Qdrant Deployment and Service (unchanged)
+# -----------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qdrant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qdrant
+  template:
+    metadata:
+      labels:
+        app: qdrant
+    spec:
+      containers:
+        - name: qdrant
+          image: qdrant/qdrant:latest
+          ports:
+            - containerPort: 6333
+          env:
+            - name: QDRANT__SERVICE__LISTEN
+              value: "0.0.0.0:6333"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant
+spec:
+  selector:
+    app: qdrant
+  ports:
+    - protocol: TCP
+      port: 6333
+      targetPort: 6333
+  type: ClusterIP
+---
+# -----------------------------------------------------
+# 2. Python App Deployment (Simplified without volume mounts)
+# -----------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-python-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-python-app
+  template:
+    metadata:
+      labels:
+        app: my-python-app
+    spec:
+      containers:
+      - name: my-python-app
+        image: my-python-app:latest
+        imagePullPolicy: Never  # Ensures Kubernetes uses your local image
+        ports:
+        - containerPort: 8501  # For Streamlit
+        - containerPort: 5000  # For Flask
+        env:
+          - name: QDRANT_HOST
+            value: "qdrant"
+          - name: QDRANT_PORT
+            value: "6333"
+        volumeMounts:
+          - name: app-code
+            mountPath: /app
+          - name: docs
+            mountPath: /app/docs
+      volumes:
+        - name: app-code
+          hostPath:
+            path: /mnt/c/Users/VaibhavDagwal/Desktop/OnPremLLM
+            type: DirectoryOrCreate
+        - name: docs
+          hostPath:
+            path: /mnt/c/Users/VaibhavDagwal/Desktop/OnPremLLM/docs
+            type: DirectoryOrCreate
+
+# -----------------------------------------------------
+# 3. Python App Service
+# -----------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-python-app-service
+spec:
+  selector:
+    app: my-python-app
+  ports:
+    - protocol: TCP
+      port: 8501
+      targetPort: 8501
+      name: streamlit
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      name: flask
+  type: ClusterIP
