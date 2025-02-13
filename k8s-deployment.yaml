@@ -1,7 +1,3 @@
----
-# -----------------------------------------------------
-# 1. Qdrant Deployment and Service (unchanged)
-# -----------------------------------------------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -56,32 +52,13 @@ spec:
         app: my-python-app
     spec:
       containers:
-      - name: my-python-app
-        image: my-python-app:latest
-        imagePullPolicy: Never  # Ensures Kubernetes uses your local image
-        ports:
-        - containerPort: 8501  # For Streamlit
-        - containerPort: 5000  # For Flask
-        env:
-          - name: QDRANT_HOST
-            value: "qdrant"
-          - name: QDRANT_PORT
-            value: "6333"
-        volumeMounts:
-          - name: app-code
-            mountPath: /app
-          - name: docs
-            mountPath: /app/docs
-      volumes:
-        - name: app-code
-          hostPath:
-            path: /mnt/c/Users/VaibhavDagwal/Desktop/OnPremLLM
-            type: DirectoryOrCreate
-        - name: docs
-          hostPath:
-            path: /mnt/c/Users/VaibhavDagwal/Desktop/OnPremLLM/docs
-            type: DirectoryOrCreate
-
+        - name: my-python-app
+          image: my-python-app:latest
+          imagePullPolicy: Never # Ensures the local image is used
+          ports:
+            - containerPort: 8501 # For Streamlit
+            - containerPort: 5000 # For Flask
+---
 # -----------------------------------------------------
 # 3. Python App Service
 # -----------------------------------------------------
